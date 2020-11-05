@@ -18,6 +18,22 @@
 /*
 ** ~ Type definition:
 */
+#ifdef __x86_64
+
+#pragma pack(1)
+struct			s_descriptorIDT
+{
+  unsigned short	offset_lo;
+  unsigned short	seg_selector;
+  unsigned char		reserved;
+  unsigned char		flag;
+  unsigned short	offset_mid;
+  u32             offset_hi;
+  u32             reserved2;
+};
+
+#else
+
 #pragma pack(1)
 struct			s_descriptorIDT
 {
@@ -27,6 +43,8 @@ struct			s_descriptorIDT
   unsigned char		flag;
   unsigned short	offset_hi;
 };
+
+#endif /* !64 bits */
 
 /*
 ** ~ Function prototypes:

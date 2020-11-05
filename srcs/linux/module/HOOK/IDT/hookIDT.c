@@ -47,12 +47,14 @@ static void	hookIDT_exit(void)
 */
 unsigned long	get_idt_addr(void)
 {
-  unsigned char	idtr[6];
-  unsigned long	idt;
+  struct s_idtr {
+    u16 limit;
+    unsigned long addr;
+  };
+  struct s_idtr idtr;
 
   __asm__ volatile ("sidt %0" :  "=m" (idtr));
-  idt = *((unsigned long *)&idtr[2]);
-  return (idt);
+  return idtr.addr;
 }
 
 int		epiHook(int nINT, void *new_interrupt)
