@@ -1,0 +1,5 @@
+hookIDT.ko
+hookIDT.o
+hookIDT.mod*
+Module.symvers
+modules.order
