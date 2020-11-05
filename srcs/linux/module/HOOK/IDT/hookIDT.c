@@ -30,8 +30,9 @@ static int	hookIDT_init(void)
   printk(KERN_ALERT "[MSG] deadlands h00k IDT - module init\n");
 
   ptr_idt_table = get_idt_addr();
+  printk(KERN_ALERT "[MSG] deadlands h00k IDT - IDT addr: 0x%lx\n", ptr_idt_table);
   epiHook(INT_0, &my_handler);
-  printk(KERN_ALERT "[MSG] deadlands h00k SYS - interrupt powned!\n");
+  printk(KERN_ALERT "[MSG] deadlands h00k IDT - interrupt powned!\n");
   return (0);
 }
 
