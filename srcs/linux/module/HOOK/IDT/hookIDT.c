@@ -33,6 +33,8 @@ static int	hookIDT_init(void)
   printk(KERN_ALERT "[MSG] deadlands h00k IDT - IDT addr: 0x%lx\n", ptr_idt_table);
   epiHook(INT_0, &my_handler);
   printk(KERN_ALERT "[MSG] deadlands h00k IDT - interrupt powned!\n");
+  printk(KERN_ALERT "[MSG] deadlands h00k IDT - Trigger divide by zero (INT 0)\n");
+  __asm__ volatile ("INT $0");
   return 0;
 }
 
