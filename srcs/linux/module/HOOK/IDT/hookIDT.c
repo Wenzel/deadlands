@@ -69,9 +69,19 @@ int		epiHook(int nINT, void *new_interrupt)
   old_interrupt = (unsigned long)get_interrupt_from_idt(nINT);
   printk(KERN_ALERT "[MSG] deadlands h00k IDT - interrupt found @0x%p\n", &old_interrupt);
 
+#ifdef __x86_64
+
+  idt[nINT].offset_hi = (u32)(addr >> 32);
+  idt[nINT].offset_mid = (unsigned short)(addr >> 16);
+  idt[nINT].offset_lo = (unsigned short)(addr & 0x0000FFFF);
+
+#else // 32 bits
+
   idt[nINT].offset_hi = (unsigned short)(addr >> 16);
   idt[nINT].offset_lo = (unsigned short)(addr & 0x0000FFFF);
-  return (0);
+
+#endif
+  return 0;
 }
 
 void		*get_interrupt_from_idt(int nINT)
