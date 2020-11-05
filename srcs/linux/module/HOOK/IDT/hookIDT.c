@@ -33,7 +33,7 @@ static int	hookIDT_init(void)
   printk(KERN_ALERT "[MSG] deadlands h00k IDT - IDT addr: 0x%lx\n", ptr_idt_table);
   epiHook(INT_0, &my_handler);
   printk(KERN_ALERT "[MSG] deadlands h00k IDT - interrupt powned!\n");
-  return (0);
+  return 0;
 }
 
 static void	hookIDT_exit(void)
@@ -67,7 +67,7 @@ int		epiHook(int nINT, void *new_interrupt)
   idt = (struct s_descriptorIDT *)ptr_idt_table;
 
   old_interrupt = (unsigned long)get_interrupt_from_idt(nINT);
-  printk(KERN_ALERT "[MSG] deadlands h00k IDT - interrupt found @0x%p\n", &old_interrupt);
+  printk(KERN_ALERT "[MSG] deadlands h00k IDT - Switching interrupt[%d] 0x%p -> 0x%p\n", nINT, (void*)old_interrupt, (void*)new_interrupt);
 
 #ifdef __x86_64
 
@@ -90,8 +90,17 @@ void		*get_interrupt_from_idt(int nINT)
   void				*addr;
 
   idt = &((struct s_descriptorIDT *)ptr_idt_table)[nINT];
+
+#ifdef __x86_64
+
+  addr = (void *)(((u64)idt->offset_hi << 32)) + (((u64)idt->offset_mid << 16) + idt->offset_lo);
+
+#else // 32 bits
+
   addr = (void *)((idt->offset_hi << 16) + idt->offset_lo);
-  return (addr);
+
+#endif
+  return addr;
 }
 
 asmlinkage void my_handler(struct pt_regs * regs, long err_code)
